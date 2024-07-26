@@ -31,10 +31,10 @@ PASS = $(IN:-input.txt=.passed)
 # =============================================================================
 # Tasks
 
-all: clean-before test clean-after
+all: format clean-before test clean-after
 
 $(FORMATTED_FILES): %.formatted: %
-	@clang-format --style=file $* > $*.formatted
+	@clang-format-18 --style=file $* > $*.formatted
 	diff $* $*.formatted
 
 $(EXE_32_STD_ALLOC): $(FORMATTED_FILES)
@@ -75,4 +75,10 @@ clean-before:
 clean-after:
 	rm -f $(ACT_32_STD_ALLOC) $(ACT_64_STD_ALLOC) $(ACT_32) $(ACT_64) $(PASS)
 
-.PHONY: all test clean
+format:
+	clang-format-18 -i $(SOURCES) $(HEADERS)
+
+aldo: format
+	$(GCC) $(FLAGS) $(SOURCES) -o $@
+
+.PHONY: all test clean aldo
