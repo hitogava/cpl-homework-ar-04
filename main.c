@@ -186,5 +186,5 @@ int main(void) {
 
     free(un);
     free(intersection);
-    free(difference);
+    free(difference); 
 }
